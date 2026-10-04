@@ -10,6 +10,8 @@
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="OrbitalOne: Planet Destroyer">
 <link rel="manifest" href="manifest.webmanifest">
+<!-- Usage numbers and owner tools, shared by every Spectrum Tech Engine app -->
+<script src="https://thespectrumtechengine.com/ste-owner.js" data-app="orbital-one" defer></script>
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
 <style>
@@ -563,7 +565,7 @@
     <h1>ORBITAL ONE</h1>
     <h2>PLANET DESTROYER</h2>
   </div>
-  <div id="splashBy"><div class="steLogo" role="img" aria-label="Created by the Spectrum Tech Engine"></div></div>
+  <div id="splashBy"><div class="steLogo" data-ste-badge role="img" aria-label="Created by the Spectrum Tech Engine"></div></div>
   <div id="splashHelp">
     <div class="helpCard">
       <h3>HOW TO FLY</h3>
@@ -779,7 +781,7 @@
       <button id="btnPauseSettings"><b>Sound & hangar</b><span>Sliders, ship, mode</span></button>
       <button id="btnStartOver"><b>Start all over</b><span>Wipe progress. Back to the landing page.</span></button>
     </div>
-    <div class="steLogo" role="img" aria-label="Created by the Spectrum Tech Engine"></div>
+    <div class="steLogo" data-ste-badge role="img" aria-label="Created by the Spectrum Tech Engine"></div>
   </div>
 </div>
 <div id="trophyOverlay">
@@ -861,7 +863,7 @@
     </div>
     <button type="button" id="btnBlast">BLAST OFF</button>
     <button type="button" class="backTop" id="btnHangarBoard">LEADERBOARDS</button>
-    <div class="steLogo" role="img" aria-label="Created by the Spectrum Tech Engine"></div>
+    <div class="steLogo" data-ste-badge role="img" aria-label="Created by the Spectrum Tech Engine"></div>
   </div>
 </div>
 <div id="scoreOverlay">
@@ -1805,6 +1807,7 @@
 
   function win() {
     state = 'win';
+    ste('detail', 'level ' + (levelIdx + 1) + ' cleared'); ste('value', 'crashes-per-level', crashes);
     winHold = 0;
     setPhase('CLEAR');
     ship.gone = true;
@@ -2159,8 +2162,12 @@
     });
   }
 
+  // Usage numbers for the owner (ste-owner.js on the website); never gets in the way of the game
+  function ste(f, ...a) { try { if (window.STE && window.STE[f]) window.STE[f](...a); } catch (e) {} }
+
   function startWith(d) {
     if (d) difficulty = d;
+    ste('track', 'play'); ste('detail', 'difficulty-' + diffLabel());
     applyCaptain((shipNameEl && shipNameEl.value) || shipName);
     persistLoadout();
     loadProfile();
@@ -2651,6 +2658,7 @@
   }
 
   btnShare.addEventListener('click', async () => {
+    ste('track', 'share');
     const text = shareText();
     try {
       if (navigator.share) {
